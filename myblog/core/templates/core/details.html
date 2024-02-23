@@ -1,0 +1,43 @@
+{% extends 'blog/base.html' %}
+
+{% block title %}
+    {{ post.title }} | {% endblock %}
+
+{% block content %}
+
+    <div class="w3-container w3-light-grey" style="padding: 128px 16px;">
+        {% if post.image %}
+        <figure class="image mb-6">
+            <img src="{{ post.image.url }}">
+        </figure>
+    {% endif %}
+    
+        <h1>{{ post.body }}</h1>
+        <p>Category:<a href="{% url 'category_detail' post.category.slug %}">{{ post.category }}</a> </p>
+    </div>
+
+    <div>
+        <h2>Comments</h2>
+    </div>
+
+    <div>
+        <form method="post" class="mb-6">
+            {% csrf_token %}
+            {{ form.as_p }}
+
+            <div>
+                <button class="button is-success">Submit Comment</button>
+            </div>
+        </form>
+    </div>
+
+    <div class="mb-6">
+        {% for comment in comments %}
+    <div>
+        <p>{{ comment.name }} - {{ comment.created_at|timesince }}</p>
+        <p>{{ comment.body }}</p>
+       
+    </div>
+{% endfor %}
+    </div>
+{% endblock %}
