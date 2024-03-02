@@ -3,27 +3,320 @@
 {% block content %}
 <!-- Promo Section - "We know design" -->
 
-{% for post in posts %}
-<div class="w3-container w3-light-grey" style="padding:128px 16px">
+{% load static %}
+
+
+<header>
+  <!-- header inner -->
+  <div  class="head_top">
+   
+     <!-- end header inner -->
+     <!-- end header -->
+     <!-- banner -->
+     <section class="banner_main">
+        <div     class="container">
+           <div class="row d_flex">
+              <div class=" col-xl-8 col-lg-8 col-md-8 col-12-9">
+                 <div class="text-bg">
+                    <h1>Blog<br> <span class="white1">Landing Page 2024</span></h1>
+                    <p>It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout. The point of using Lorem Ipsum is that it has a more-or-less normal distribution of letters,</p>
+                    <a href="#">Read More</a>
+                 </div>
+              </div>
+              <div class="col-xl-4 col-lg-4 col-md-4 col-12-3">
+                 <div class="text-img">
+                    <figure><img src="{% static 'images/box_img.png' %}" alt="#"/></figure>
+                 </div>
+              </div>
+           </div>
+        </div>
+     </section>
+  </div>
+</header>
+
+
+<!-- silder -->
+
+<div id="about" class="titlepage">
+  <h2>Our Blogs</h2>
+  <span>It is a long established fact that a reader will be distracted by the readable content of a page </span>
+</div>
+
+
+<div class="slider-container">
+
+  <button class="prev" onclick="moveSlide(-1)">&#10094;</button>
+  <div class="slider">
+    {% for post in posts %}
+    <div class="slide">
+      {% if post.image %}
+
+      <div class="image-section">
+        <img src="{{ post.image.url }}" alt="Image 2">
+      </div>
+
+      {% endif %}
+      <div class="content-section">
+        <h2>{{post.title}}</h2>
+        <p>{{post.intro}}</p>
+        <div class="text-bg-button">
+          <a href="{% url 'details' post.category.slug post.slug %}">
+            Read More</a>
+        </div>
+
+      </div>
+    </div>
+    {% endfor %}
+  </div>
+  <button class="next" onclick="moveSlide(1)">&#10095;</button>
+</div>
+<script src="{% static 'css/script.js' %}"></script>
+
+<!-- end slider -->
+
+<div class="blog_main">
+  <div class="container">
+    <!-- end fist section -->
+
+    <section class="blog-posts">
+      <div class="container">
+        <div class="row">
+          <div class="col-lg-8">
+            <div class="all-blog-posts">
+              <div class="row">
+                {% for post in posts|slice:":3" %}
+
+                <div class="col-lg-12">
+                  <div class="blog-post">
+                    {% if post.image %}
+                    <div class="blog-thumb">
+                      <img src="{{ post.image.url }}" alt="">
+                    </div>
+                    {% endif %}
+
+                    <div class="down-content">
+                      <span><a href="{% url 'category_detail' post.category.slug %}">{{ post.category }}</a></span>
+
+                      <a href="{% url 'details' post.category.slug post.slug %}">
+                        <h4>{{post.title}}</h4>
+                      </a>
+                      <ul class="post-info">
+                        <li>Admin</li>
+                        <li>{{post.created_at |date:'M-d-y h:i'}}</li>
+                        <li>{{ post.num_comments }} Comments</li>
+                      </ul>
+                      <a href="{% url 'details' post.category.slug post.slug %}">
+                        <p>{{post.intro}}</p>
+                      </a>
+                    </div>
+
+                  </div>
+                </div>
+
+                {% endfor %}
+
+                <div id="hidden-posts" style="display: none;">
+                  {% for post in posts|slice:"3:" %}
+                  <div class="col-lg-12">
+                    <div class="blog-post">
+                      {% if post.image %}
+                      <div class="blog-thumb">
+                        <img src="{{ post.image.url }}" alt="">
+                      </div>
+                      {% endif %}
+
+                      <div class="down-content">
+                        <span><a href="{% url 'category_detail' post.category.slug %}">{{ post.category }}</a></span>
+
+                        <a href="{% url 'details' post.category.slug post.slug %}">
+                          <h4>{{post.title}}</h4>
+                        </a>
+                        <ul class="post-info">
+                          <li>Admin</li>
+                          <li>{{post.created_at |date:'M-d-y h:i'}}</li>
+                          <li>{{ post.num_comments }} Comments</li>
+                        </ul>
+                        <a href="{% url 'details' post.category.slug post.slug %}">
+                          <p>{{post.intro}}</p>
+                        </a>
+                      </div>
+
+                    </div>
+                  </div>
+                  {% endfor %}
+                </div>
+
+                
+
+              </div>
+              <!-- View more button -->
+              <div class="text-bg-button">
+                <button id="view-more-btn">View More</button>
+
+              </div>
+            </div>
+          </div>
+         
+         
+          <div class="col-lg-4">
+            <div class="sidebar">
+              <div class="row">
+
+                <div class="col-lg-12">
+                  <div class="sidebar-item search">
+
+                    <form method="get" action="{% url 'search' %}">
+                      <input class="searchText" name="query" type="text" placeholder="Search" autocomplete="on">
+                    </form>
+                  </div>
+                </div>
+
+                <!-- RECENT POSTS -->
+
+                <div class="col-lg-12">
+                  <div class="sidebar-item recent-posts">
+                    <div class="sidebar-heading">
+                      <h2>Recent Posts</h2>
+                    </div>
+                    {% for post in posts %}
+                    <div class="content">
+                      <ul>
+                        <li><a href="post-details.html">
+                            <a href="{% url 'details' post.category.slug post.slug %}">
+                              <h5>{{post.intro}}</h5>
+                            </a>
+                            <span>{{post.created_at |date:'M-d-y h:i'}}</span>
+                          </a></li>
+                      </ul>
+                    </div>
+                    {% endfor %}
+
+
+
+
+                  </div>
+                </div>
+                <div class="col-lg-12">
+                  <div class="sidebar-item categories">
+                    <div class="sidebar-heading">
+                      <h2>Categories</h2>
+                    </div>
+
+
+                    {% for post in posts %}
+                    <div class="content">
+                      <ul>
+                        <li><a href="{% url 'category_detail' post.category.slug %}">{{ post.category }}</a></li>
+
+                      </ul>
+                    </div>
+                    {% endfor %}
+
+
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+
+
+
+
+        </div>
+      </div>
+    </section>
+    </div>
+  </div>
+  <!-- end blog_main -->
+
+
+
+  <!-- contact -->
+  <div class="contact">
+    <div class="container">
+      <div class="row">
+        <div class="col-md-12">
+          <div class="titlepage">
+            <h2 id="contact">Contact us</h2>
+            <span>There are many variations of passages of Lorem Ipsum available, but the </span>
+            {% if thank_you %}
+            <h3>Thank you for contacting us. We will get back to you shortly.</h3>
+        {% endif %}
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <div class="form-container">
+    
+      <form method="post" class="main_form ">
+          {% csrf_token %}
+          {{ form.as_p }}
+          <button type="submit" class="send_btn">Submit</button>
+      </form>
+  </div>
+
+  
+    <!-- <div class="container">
+      <div class="row">
+        <div class="col-md-12 ">
+          <form class="main_form ">
+            <div class="row">
+              <div class="col-md-12 ">
+                <input class="form_contril" placeholder="Name " type="text" name="Name ">
+              </div>
+              <div class="col-md-12">
+                <input class="form_contril" placeholder="Phone Number" type="text" name=" Phone Number">
+              </div>
+              <div class="col-md-12">
+                <input class="form_contril" placeholder="Email" type="text" name="Email">
+              </div>
+              <div class="col-md-12">
+                <textarea class="textarea" placeholder="Message" type="text" name="Message"></textarea>
+              </div>
+              <div class="col-sm-12">
+                <button class="send_btn">Send</button>
+              </div>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div> -->
+  <!-- end contact -->
+  <!-- {% for post in posts %}
+  <div class="w3-container w3-light-grey" style="padding:128px 16px">
     <div class="w3-row-padding">
       <div class="w3-col m6">
         <a href="{% url 'details' post.category.slug post.slug %}">
 
           {% if post.image %}
           <figure class="image">
-              <img src="{{ post.image.url }}">
+            <img src="{{ post.image.url }}">
           </figure>
-      {% endif %}
-      
-        <h6>{{post.created_at |date:'M-d-y h:i'}}</h6>
-        <h3>{{post.title}}</h3>
-        <p>{{post.intro}}</p>
-      </a>
+          {% endif %}
+
+          <h6>{{post.created_at |date:'M-d-y h:i'}}</h6>
+          <h3>{{post.title}}</h3>
+          <p>{{post.intro}}</p>
+        </a>
       </div>
       <div class="w3-col m6">
-        <img class="w3-image w3-round-large" src="/w3images/phone_buildings.jpg" alt="Buildings" width="700" height="394">
+        <img class="w3-image w3-round-large" src="/w3images/phone_buildings.jpg" alt="Buildings" width="700"
+          height="394">
       </div>
     </div>
   </div>
-  {% endfor %}
-{% endblock %}
+  {% endfor %} -->
+  <script>
+    document.getElementById('view-more-btn').addEventListener('click', function () {
+      // Show hidden posts
+      document.getElementById('hidden-posts').style.display = 'block';
+      // Hide the view more button
+      this.style.display = 'none';
+    });
+  </script>
+
+
+  {% endblock %}

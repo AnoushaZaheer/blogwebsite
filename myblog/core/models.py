@@ -26,7 +26,7 @@ class post(models.Model):
         (DRAFT, 'Draft')
     )
     category = models.ForeignKey(Category, related_name='posts', on_delete=models.CASCADE)
-    title=models.CharField(max_length=255)
+    title=models.CharField(max_length=100)
     slug=models.SlugField()
     intro=models.TextField()
     body=models.TextField()

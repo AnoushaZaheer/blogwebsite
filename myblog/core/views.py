@@ -1,12 +1,16 @@
 from django.shortcuts import render, get_object_or_404, redirect
 from .models import post, comments,Category
 from .forms import commentform
+from django.db.models import Count
 from django.db.models import Q
 from django.http.response import HttpResponse
 from django.http import HttpResponse
 
 def details(request, category_slug, slug, status=post.ACTIVE):
-    post_instance = get_object_or_404(post, slug=slug) 
+    # post_instance = get_object_or_404(post, slug=slug) 
+    posts = post.objects.filter(status=post.ACTIVE)
+    # post_instance = get_object_or_404(post, slug=slug, status=post.ACTIVE).annotate(num_comments=Count('commentr'))
+    post_instance = get_object_or_404(post.objects.annotate(num_comments=Count('commentr')), slug=slug, status=post.ACTIVE)
     comments_list = comments.objects.filter(post_f=post_instance)
     
     if request.method == 'POST':
@@ -19,7 +23,7 @@ def details(request, category_slug, slug, status=post.ACTIVE):
     else:
         form = commentform()
     
-    return render(request, 'core/details.html', {'post': post_instance, 'comments': comments_list, 'form': form})
+    return render(request, 'core/details.html', {'posts':posts,'post': post_instance, 'form': form, 'comments':comments_list})
 
 
 def category(request, slug):
